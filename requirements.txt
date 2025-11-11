@@ -1,0 +1,4 @@
+gdal==3.6.2
+requests
+s3fs
+xarray
