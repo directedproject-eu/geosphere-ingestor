@@ -1,4 +1,4 @@
-gdal==3.6.2
+gdal==3.10.3
 h5netcdf
 requests
 s3fs
