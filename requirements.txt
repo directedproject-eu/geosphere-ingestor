@@ -1,5 +1,6 @@
 gdal==3.10.3
 h5netcdf
+h5py
 requests
 s3fs
 xarray

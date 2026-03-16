@@ -26,10 +26,12 @@ logger = logging.getLogger(__name__)
 
 def delete_outdated_forecasts(bucket_path, endpoint_url, key, secret):
     logger.debug(f"Delete path {bucket_path} recursively.")
-    s3 = S3FileSystem(endpoint_url=endpoint_url, key=key, secret=secret)
     try:
+        s3 = S3FileSystem(endpoint_url=endpoint_url, key=key, secret=secret)
         s3.rm(bucket_path, recursive=True)
     except FileNotFoundError as err:
+        logger.debug(f"Path {bucket_path} does not exist: {err}")
+    except Exception as err:
         logger.debug(err)
 
 
@@ -161,13 +163,14 @@ if __name__ == "__main__":
             )
             with open(forecast_json_filename, "w", encoding="utf-8") as fp:
                 json.dump(data, fp, indent=4)
-            upload_to_bucket(
-                forecast_json_filename,
-                forecast_json_bucket_path,
-                bucket_endpoint,
-                bucket_key,
-                bucket_secret,
-            )
+            if upload:
+                upload_to_bucket(
+                    forecast_json_filename,
+                    forecast_json_bucket_path,
+                    bucket_endpoint,
+                    bucket_key,
+                    bucket_secret,
+                )
             try:
                 os.remove(nc_filename)
                 os.remove(cog_filename)
